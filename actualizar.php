@@ -1,91 +1,99 @@
 <?php
+include "conexion.php";
 
-    include "conexion.php";
-
-    if(isset($_GET["actualizar"])){
-
-        $modelo = $_GET["modelo"];
-        $descripcion = $_GET["descripcion"];
-        $precio = $_GET["precio"];
-        $kilometraje = $_GET["kilometraje"];
-        $marca = $_GET["marca"];
-
-        $consulta = "UPDATE cars SET MODELO = '$modelo', DESCRIPCION = '$descripcion', PRECIO = '$precio', KILOMETRAJE = '$kilometraje', BRANDID = '$marca' WHERE cars.MODELO = '$modelo';";
-
-        if($con->query($consulta)){
-            echo "Datos actualizados correctamente";
-        }else{
-            echo "Los datos no fueron actualizados"; 
-        }
-    }
-
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $sql = "SELECT * FROM usuarios WHERE id = '$id'";
+    $resultado = $con->query($sql);
+    $fila = $resultado->fetch_assoc();
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style_b.css">
-    <title>Update</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Perfiles</title>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Inicio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="casa.php">Carros</a>
-                <a class="nav-link" href="marcas.php">marcas</a>
-                <a class="nav-link active" aria-current="page" href="crear.php">Ingresar carros</a>
-            </div>
-            </div>
-        </div>
+    <nav>
+        <a href="index.php">Inicio</a>
+        <a href="crear.php">Login</a>
+        <a href="registrer.php">Register</a>
+        <a href="casa.php">Mi perfil</a>
     </nav>
 
-    <h1>Actualizar producto</h1>
-    <br>
-    <form action="actualizar.php" method="get">
-    <?php
+    <form action="actualizar.php" method="post" class="container">
+        <input type="hidden" name="id" value="<?php echo $fila['id']; ?>">
 
-        include"conexion.php";
-
-        $modelo = $_GET["modelo"];
-        $descripcion = $_GET["descripcion"];
-        $precio = $_GET["precio"];
-        $kilometraje = $_GET["kilometraje"];
-        $marca = $_GET["marca"];
-
-        echo '
-            <label for="modelo"><h2>Modelo</h2></label>
-            <input type="text" name="modelo" id="modelo" '.$modelo.' required>
+        <div class="form-group">
+            <label>Nombre:</label>
+            <input type="text" name="nombre" value="<?php echo $fila['nombre']; ?>" required>
             <br><br>
+        </div>
 
-            <label for="descripcion"><h2>Descripcion</h2></label>
-            <input type="text" name="descripcion" id="descripcion" '.$descripcion.' required>
+        <div class="form-group">
+            <label>Tipo de documento:</label>
+            <input type="text" name="tipodoc" value="<?php echo $fila['tipodoc']; ?>" required>
             <br><br>
+        </div>
 
-            <label for="precio"><h2>Precio</h2></label>
-            <input type="text" name="precio" id="precio" '.$precio.' required>
+        <div class="form-group">
+            <label>Número de documento:</label>
+            <input type="text" name="numerodoc" value="<?php echo $fila['numerodoc']; ?>" required>
             <br><br>
+        </div>
 
-            <label for="kilometraje"><h2>Kilometraje</h2></label>
-            <input type="text" name="kilometraje" id="kilometraje" '.$kilometraje.' required>
+        <div class="form-group">
+            <label>Fecha de nacimiento:</label>
+            <input type="date" name="fechan" value="<?php echo $fila['fechan']; ?>" required>
             <br><br>
+        </div>
 
-            <label for="IDmarca"><h2>ID marca</h2></label>
-            <input type="number" name="marca" id="marca" '.$marca.' required>
+        <div class="form-group">
+            <label>Usuario:</label>
+            <input type="text" name="usuario" value="<?php echo $fila['usuario']; ?>" required>
             <br><br>
+        </div>
 
-            <input type="submit" value="Actualizar carro" name="actualizar">
-        ';
-    
-    ?>
+        <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" name="contrasena" value="<?php echo $fila['contrasena']; ?>" required><br><br>
+        </div>
+
+        <input type="submit" name="actualizar" value="Actualizar">
     </form>
+
 </body>
 </html>
+
+<?php
+
+if (isset($_POST['actualizar'])) {
+    $id = $_POST['id'];
+    $nombre = $_POST['nombre'];
+    $tipodoc = $_POST['tipodoc'];
+    $numerodoc = $_POST['numerodoc'];
+    $fechan = $_POST['fechan'];
+    $usuario = $_POST['usuario'];
+    $contrasena = $_POST['contrasena'];
+
+    $consulta = "UPDATE usuarios SET 
+        nombre = '$nombre',
+        tipodoc = '$tipodoc',
+        numerodoc = '$numerodoc',
+        fechan = '$fechan',
+        usuario = '$usuario',
+        contrasena = '$contrasena'
+        WHERE id = '$id'";
+
+    if ($con->query($consulta)) {
+        header("location: indextwo.php");
+    } else {
+        echo "❌ Error al actualizar: " . $con->error;
+    }
+}
+?>

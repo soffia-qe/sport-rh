@@ -2,14 +2,14 @@
 
 include "conexion.php";
 
-$modelo = $_GET["modelo"];
+$id = $_GET["id"];
 
-$consulta = "DELETE FROM cars WHERE MODELO = '$modelo'";
+$consulta = "DELETE FROM usuarios WHERE id = '$id'";
 
 if($con->query($consulta)){
-    header("location: casa.php");
+    header("location: indextwo.php");
 }else{
-    echo "los datos no fueron eliminados";
+    echo "❌ Los datos no fueron eliminados";
 }
 
 ?>
@@ -20,25 +20,16 @@ if($con->query($consulta)){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style_b.css">
+    <link rel="stylesheet" href="style.css">
     <title>Delete</title>
 </head>
 <body>
     
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Inicio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="casa.php">Carros</a>
-                <a class="nav-link" href="marcas.php">marcas</a>
-                <a class="nav-link active" aria-current="page" href="crear.php">Ingresar carros</a>
-            </div>
-            </div>
-        </div>
+    <nav>
+        <a href="index.php">Inicio</a>
+        <a href="crear.php">Login</a>
+        <a href="registrer.php">Register</a>
+        <a href="casa.php">Mi perfil</a>
     </nav>
 
 </body>

@@ -1,6 +1,6 @@
 <?php
 
-    $con = new mysqli("localhost","root","","concesionariotest");
+    $con = new mysqli("localhost","root","","test");
     //echo $con->host_info;
 
 ?>

@@ -2,23 +2,28 @@
 
 include "conexion.php";
 
-if(isset($_POST["crear"])){
+session_start();
 
-    $modelo = $_POST["modelo"];
-    $descripcion = $_POST["descripcion"];
-    $precio = $_POST["precio"];
-    $kilometraje = $_POST["kilometraje"];
-    $marca = $_POST["marca"];
+if (isset($_POST["login"])) {
+    // Recibir datos
+    $usuario = $_POST["usuario"];
+    $contrasena = $_POST["contrasena"];
 
-    $consulta = "INSERT INTO cars (ID, MODELO, DESCRIPCION, PRECIO, KILOMETRAJE, BRANDID) VALUES (NULL, '$modelo', '$descripcion', '$precio', '$kilometraje', '$marca');";
+    // Consultar usuario
+    $consulta = "SELECT * FROM usuarios WHERE usuario = '$usuario' AND contrasena = '$contrasena'";
+    $resultado = $con->query($consulta);
 
-    if($con->query($consulta)){
+    if ($resultado->num_rows > 0) {
+        $fila = $resultado->fetch_assoc();
 
-        echo "datos creados correctamente";
-    
-    }else{
+        // Guardar datos de sesión
+        $_SESSION['usuario'] = $fila['usuario'];
+        $_SESSION['nombre'] = $fila['nombre'];
 
-        echo "los datos no fueron creados";
+        // Redirigir al inicio o panel
+        header("location: indextwo.php");
+    } else {
+        echo "❌ Usuario o contraseña incorrectos.";
     }
 }
 
@@ -30,57 +35,37 @@ if(isset($_POST["crear"])){
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style_b.css">
-    <title>Registrar carros</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Login</title>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">Inicio</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-link" href="casa.php">Carros</a>
-                <a class="nav-link" href="marcas.php">marcas</a>
-                <a class="nav-link active" aria-current="page" href="crear.php">Ingresar carros</a>
-            </div>
-            </div>
-        </div>
-    </nav>
+<nav>
+    <a href="index.php">Inicio</a>
+    <a href="crear.php">Login</a>
+    <a href="registrer.php">Register</a>
+    <a href="casa.php">Mi perfil</a>
+</nav>
 
     <center>
-        <br><br>
 
-        <h1>Ingresar carros</h1>
+        <h1>Iniciar sesión</h1>
 
-        <br><br><br>
+        <form action="crear.php" method="post" id="registrar" class="container">
 
-        <form action="crear.php" method="post" id="registrar">
+            <div class="form-group">
+                <label for="usuario"><h2>Usuario</h2></label>
+                <input type="text" name="usuario" id="usuario" required>
+                <br><br>
+            </div>
             
-            <label for="modelo"><h2>Modelo</h2></label>
-            <input type="text" name="modelo" id="modelo" required>
-            <br><br>
+            <div class="form-group">
+                <label for="contrasena"><h2>Contraseña</h2></label>
+                <input type="password" name="contrasena" id="contrasena" required>
+                <br><br>
+            </div>
 
-            <label for="descripcion"><h2>Descripcion</h2></label>
-            <input type="text" name="descripcion" id="descripcion" required>
-            <br><br>
-
-            <label for="precio"><h2>Precio</h2></label>
-            <input type="text" name="precio" id="precio" required>
-            <br><br>
-
-            <label for="kilometraje"><h2>Kilometraje</h2></label>
-            <input type="text" name="kilometraje" id="kilometraje" required>
-            <br><br>
-
-            <label for="IDmarca"><h2>ID marca</h2></label>
-            <input type="number" name="marca" id="marca" required>
-            <br><br>
-
-            <input type="submit" value="Registrar carro" name="crear">
+            <input type="submit" value="Inisiar sesión" name="login">
 
         </form>
     </center>
